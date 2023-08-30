@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const config = require("config");
 
 const User = require("../model/user.model");
+
 const ResetCode = require("../model/reset-code.model");
 const { createError, createSuccess } = require("../utils/htpp-response");
 const { isAuthenticated } = require("../utils/middleware/auth.middleware");
@@ -22,6 +23,7 @@ router.post("/login", async (req, res) => {
     email: Joi.string().min(5).max(70).required().email(),
     password: Joi.string().min(5).max(70).required(),
   });
+
 
   const { error } = schema.validate(req.body);
   if (error) return res.send(createError(400, error.details[0].message));
@@ -101,6 +103,8 @@ router.post("/initiate-reset", async (req, res) => {
   });
   return res.send(createSuccess(newResetCode));
 });
+
+
 
 router.post("/reset-password", async (req, res) => {
   let schema = Joi.object({
